@@ -1,9 +1,9 @@
 --- Instruments ---
-[{'exchange': 'NASDAQ', 'instrumentType': 'EQUITY', 'lastTradedPrice': 150.0, 'symbol': 'AAPL'}, {'exchange': 'NASDAQ', 'instrumentType': 'EQUITY', 'lastTradedPrice': 2800.0, 'symbol': 'GOOGL'}, {'exchange': 'NASDAQ', 'instrumentType': 'EQUITY', 'lastTradedPrice': 700.0, 'symbol': 'TSLA'}]
---- Placing BUY Order (AAPL) ---
+[{'exchange': 'NSE', 'instrumentType': 'EQUITY', 'lastTradedPrice': 150.0, 'symbol': 'reliance'}, {'exchange': 'NSE', 'instrumentType': 'EQUITY', 'lastTradedPrice': 2800.0, 'symbol': 'TataMotor'}, {'exchange': 'NSE', 'instrumentType': 'EQUITY', 'lastTradedPrice': 700.0, 'symbol': 'CCD'}]
+--- Placing BUY Order (reliance) ---
 Order Response: {'orderId': 5, 'status': 'EXECUTED'}
 --- Portfolio ---
-[{'averagePrice': 150.0, 'currentValue': 3000.0, 'quantity': 20, 'symbol': 'AAPL'}]
---- Placing SELL Order (AAPL) ---
+[{'averagePrice': 150.0, 'currentValue': 3000.0, 'quantity': 20, 'symbol': 'reliance'}]
+--- Placing SELL Order (reliance) ---
 --- Final Portfolio ---
-[{'averagePrice': 150.0, 'currentValue': 2250.0, 'quantity': 15, 'symbol': 'AAPL'}]
+[{'averagePrice': 150.0, 'currentValue': 2250.0, 'quantity': 15, 'symbol': 'reliance'}]
