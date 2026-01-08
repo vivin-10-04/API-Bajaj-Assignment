@@ -4,12 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 from enum import Enum
 
 app = Flask(__name__)
-# Use SQLite for lightweight storage
+ 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///trading.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# --- ENUMS & CONSTANTS ---
+ 
 class OrderType(Enum):
     BUY = "BUY"
     SELL = "SELL"
@@ -23,8 +23,7 @@ class OrderStatus(Enum):
     PLACED = "PLACED"
     EXECUTED = "EXECUTED"
     CANCELLED = "CANCELLED"
-
-# --- DATABASE MODELS ---
+ 
 
 class Instrument(db.Model):
     symbol = db.Column(db.String(10), primary_key=True)
@@ -54,19 +53,18 @@ class Portfolio(db.Model):
     symbol = db.Column(db.String(10), primary_key=True)
     quantity = db.Column(db.Integer, default=0)
     average_price = db.Column(db.Float, default=0.0)
-
-# --- HELPER: INITIALIZE DATA ---
+ 
 def init_db():
     with app.app_context():
         db.create_all()
-        # Seed dummy instruments if empty
+         
         if not Instrument.query.first():
             db.session.add(Instrument(symbol="AAPL", exchange="NASDAQ", instrument_type="EQUITY", last_traded_price=150.0))
             db.session.add(Instrument(symbol="GOOGL", exchange="NASDAQ", instrument_type="EQUITY", last_traded_price=2800.0))
             db.session.add(Instrument(symbol="TSLA", exchange="NASDAQ", instrument_type="EQUITY", last_traded_price=700.0))
             db.session.commit()
 
-# --- ROUTES ---
+ 
 
 @app.route('/api/v1/instruments', methods=['GET'])
 def get_instruments():
@@ -82,7 +80,7 @@ def get_instruments():
 def place_order():
     data = request.json
     
-    # 1. Validation
+     
     try:
         qty = int(data.get('quantity'))
         if qty <= 0: raise ValueError
@@ -91,7 +89,7 @@ def place_order():
         price = data.get('price')
         symbol = data.get('symbol')
         
-        # Check if instrument exists
+         
         inst = Instrument.query.get(symbol)
         if not inst:
             return jsonify({"error": "Instrument not found"}), 404
@@ -102,7 +100,7 @@ def place_order():
     except (ValueError, TypeError):
         return jsonify({"error": "Invalid input data"}), 400
 
-    # 2. Create Order
+    
     new_order = Order(
         symbol=symbol,
         order_type=o_type.value,
@@ -113,9 +111,7 @@ def place_order():
     )
     db.session.add(new_order)
     db.session.commit()
-
-    # 3. Simulation Logic (Bonus)
-    # Market orders execute immediately. Limit orders stay PLACED.
+ 
     if o_style == OrderStyle.MARKET:
         execute_trade(new_order)
     else:
@@ -126,7 +122,7 @@ def place_order():
 
 def execute_trade(order):
     """Simulates trade execution and updates portfolio."""
-    # 1. Create Trade Record
+    
     trade = Trade(
         order_id=order.id,
         symbol=order.symbol,
@@ -135,21 +131,21 @@ def execute_trade(order):
     )
     order.status = OrderStatus.EXECUTED.value
     
-    # 2. Update Portfolio
+    
     port = Portfolio.query.get(order.symbol)
     if not port:
         port = Portfolio(symbol=order.symbol, quantity=0, average_price=0.0)
         db.session.add(port)
     
     if order.order_type == OrderType.BUY.value:
-        # Weighted Average Price Calculation
+         
         total_cost = (port.quantity * port.average_price) + (order.quantity * order.price)
         port.quantity += order.quantity
         port.average_price = total_cost / port.quantity
     elif order.order_type == OrderType.SELL.value:
-        # Selling reduces quantity but doesn't change average buy price
+        
         port.quantity -= order.quantity
-        # Optional: Handle short selling logic here (omitted for simplicity)
+        
     
     db.session.add(trade)
     db.session.commit()
@@ -184,10 +180,10 @@ def get_trades():
 @app.route('/api/v1/portfolio', methods=['GET'])
 def get_portfolio():
     holdings = Portfolio.query.filter(Portfolio.quantity != 0).all()
-    # Fetch current prices to calculate current value
+    
     results = []
     for h in holdings:
-        # In a real app, fetch real-time price. Here we use stored Instrument price.
+         
         inst = Instrument.query.get(h.symbol)
         current_price = inst.last_traded_price if inst else 0
         
