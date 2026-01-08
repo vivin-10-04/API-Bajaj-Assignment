@@ -10,16 +10,16 @@ try:
         instruments = client.get_instruments()
         file.write(str(instruments) + "\n")
 
-        file.write("--- Placing BUY Order (AAPL) ---\n")
-        order = client.place_order("AAPL", 10, "BUY", "MARKET")
+        file.write("--- Placing BUY Order (reliance) ---\n")
+        order = client.place_order("reliance", 10, "BUY", "MARKET")
         file.write("Order Response: " + str(order) + "\n")
 
         file.write("--- Portfolio ---\n")
         pf = client.get_portfolio()
         file.write(str(pf) + "\n")
 
-        file.write("--- Placing SELL Order (AAPL) ---\n")
-        client.place_order("AAPL", 5, "SELL", "MARKET")
+        file.write("--- Placing SELL Order (reliance) ---\n")
+        client.place_order("reliance", 5, "SELL", "MARKET")
 
         file.write("--- Final Portfolio ---\n")
         final_pf = client.get_portfolio()
