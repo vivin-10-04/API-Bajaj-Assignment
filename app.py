@@ -60,7 +60,7 @@ def init_db():
          
         if not Instrument.query.first():
             db.session.add(Instrument(symbol="reliance", exchange="NSE", instrument_type="EQUITY", last_traded_price=150.0))
-            db.session.add(Instrument(symbol="TataPower", exchange="NSE", instrument_type="EQUITY", last_traded_price=2800.0))
+            db.session.add(Instrument(symbol="TataMotor", exchange="NSE", instrument_type="EQUITY", last_traded_price=2800.0))
             db.session.add(Instrument(symbol="CCD", exchange="NSE", instrument_type="EQUITY", last_traded_price=700.0))
             db.session.commit()
 
