@@ -34,10 +34,10 @@ class Instrument(db.Model):
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     symbol = db.Column(db.String(10), nullable=False)
-    order_type = db.Column(db.String(10), nullable=False) # BUY/SELL
-    order_style = db.Column(db.String(10), nullable=False) # MARKET/LIMIT
+    order_type = db.Column(db.String(10), nullable=False)  
+    order_style = db.Column(db.String(10), nullable=False) 
     quantity = db.Column(db.Integer, nullable=False)
-    price = db.Column(db.Float, nullable=True) # Required for LIMIT
+    price = db.Column(db.Float, nullable=True)  
     status = db.Column(db.String(20), default=OrderStatus.NEW.value)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
@@ -59,9 +59,9 @@ def init_db():
         db.create_all()
          
         if not Instrument.query.first():
-            db.session.add(Instrument(symbol="AAPL", exchange="NASDAQ", instrument_type="EQUITY", last_traded_price=150.0))
-            db.session.add(Instrument(symbol="GOOGL", exchange="NASDAQ", instrument_type="EQUITY", last_traded_price=2800.0))
-            db.session.add(Instrument(symbol="TSLA", exchange="NASDAQ", instrument_type="EQUITY", last_traded_price=700.0))
+            db.session.add(Instrument(symbol="reliance", exchange="NSE", instrument_type="EQUITY", last_traded_price=150.0))
+            db.session.add(Instrument(symbol="TataPower", exchange="NSE", instrument_type="EQUITY", last_traded_price=2800.0))
+            db.session.add(Instrument(symbol="CCD", exchange="NSE", instrument_type="EQUITY", last_traded_price=700.0))
             db.session.commit()
 
  
@@ -106,7 +106,7 @@ def place_order():
         order_type=o_type.value,
         order_style=o_style.value,
         quantity=qty,
-        price=price if price else inst.last_traded_price, # Use LTP for market simulation
+        price=price if price else inst.last_traded_price,  
         status=OrderStatus.NEW.value
     )
     db.session.add(new_order)
@@ -121,8 +121,7 @@ def place_order():
     return jsonify({"orderId": new_order.id, "status": new_order.status}), 201
 
 def execute_trade(order):
-    """Simulates trade execution and updates portfolio."""
-    
+   
     trade = Trade(
         order_id=order.id,
         symbol=order.symbol,
