@@ -5,17 +5,13 @@ class TradingClient:
         self.base_url = base_url
 
     def get_instruments(self):
-        """Fetches list of tradable instruments."""
+         
         resp = requests.get(f"{self.base_url}/api/v1/instruments")
         resp.raise_for_status()
         return resp.json()
 
     def place_order(self, symbol, quantity, side, order_type="MARKET", price=None):
-        """
-        Places a new order.
-        side: 'BUY' or 'SELL'
-        order_type: 'MARKET' or 'LIMIT'
-        """
+         
         payload = {
             "symbol": symbol,
             "quantity": quantity,
